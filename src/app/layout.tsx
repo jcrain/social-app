@@ -25,7 +25,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} font-sans antialiased`}>
         <Toaster />
-        {/* @ts-expect-error Async Server Component */}
         <Nav />
         {children}
       </body>

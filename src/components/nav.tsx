@@ -6,7 +6,7 @@ import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
 import { CreatePost } from "@/components/create-post";
 
-export async function Nav() {
+export async function Nav(): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
   const {
     data: { session },
