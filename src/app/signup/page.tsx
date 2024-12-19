@@ -55,38 +55,21 @@ export default function SignUpPage() {
       setIsLoading(true);
       setError(null);
 
-      // Sign up the user
-      const { error: signUpError, data: signUpData } =
-        await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-          options: {
-            data: {
-              full_name: data.fullName,
-              preferred_username: data.username,
-              avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.username}`,
-            },
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
+            preferred_username: data.username,
+            avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.username}`,
           },
-        });
+        },
+      });
 
       if (signUpError) throw signUpError;
 
-      // Wait for the profile to be created (triggered by our database function)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Set the session
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (session) {
-        // Navigate to the profile page
-        router.push(`/profile/${data.username}`);
-        router.refresh();
-      } else {
-        // If email confirmation is required
-        setError("Please check your email to confirm your account");
-      }
+      router.push("/login?message=Check your email to confirm your account");
     } catch (error) {
       console.error(error);
       setError(

@@ -4,9 +4,8 @@ import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
-import { MessageCircle, Heart } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { ProfileBanner } from "@/components/profile-banner";
 import { LikeButton } from "@/components/like-button";
 
