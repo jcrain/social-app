@@ -1,47 +1,12 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Heart, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/supabase";
 import { LikeButton } from "@/components/like-button";
-
-async function getPosts() {
-  const supabase = createServerComponentClient<Database>({ cookies });
-
-  const { data: posts, error } = await supabase
-    .from("posts")
-    .select(
-      `
-      *,
-      profiles:user_id (
-        username,
-        full_name,
-        avatar_url
-      ),
-      comments (
-        id,
-        content,
-        created_at,
-        profiles:user_id (
-          username,
-          full_name,
-          avatar_url
-        )
-      )
-    `
-    )
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching posts:", error);
-    return [];
-  }
-
-  return posts;
-}
 
 function PostCard({ post, session }: { post: any; session: any }) {
   // Helper function to safely format dates
