@@ -76,14 +76,6 @@ export default async function ProfilePage(): Promise<JSX.Element> {
     return <div>Profile not found</div>;
   }
 
-  function formatDate(dateString: string): string {
-    try {
-      return formatDistanceToNow(new Date(dateString), { addSuffix: true });
-    } catch {
-      return "Invalid date";
-    }
-  }
-
   return (
     <div className="max-w-4xl mx-auto">
       <ProfileBanner userId={session.user.id} bannerUrl={profile.banner_url} />

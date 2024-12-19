@@ -5,7 +5,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function LogoutButton() {
+export function LogoutButton(): JSX.Element {
   const router = useRouter();
   const supabase = createClientComponentClient();
 

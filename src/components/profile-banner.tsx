@@ -13,13 +13,16 @@ interface ProfileBannerProps {
   bannerUrl: string | null;
 }
 
-export function ProfileBanner({ userId, bannerUrl }: ProfileBannerProps) {
+export function ProfileBanner({
+  userId,
+  bannerUrl,
+}: ProfileBannerProps): JSX.Element {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const supabase = createClientComponentClient();
   const router = useRouter();
 
-  function handleButtonClick() {
+  function handleButtonClick(): void {
     fileInputRef.current?.click();
   }
 

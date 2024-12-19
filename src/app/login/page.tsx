@@ -32,7 +32,7 @@ const loginSchema = z.object({
 
 type LoginValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+export default function LoginPage(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -48,7 +48,7 @@ export default function LoginPage() {
     },
   });
 
-  async function onSubmit(data: LoginValues) {
+  async function onSubmit(data: LoginValues): Promise<void> {
     try {
       setIsLoading(true);
       setError(null);

@@ -34,7 +34,7 @@ const signUpSchema = z.object({
 
 type SignUpValues = z.infer<typeof signUpSchema>;
 
-export default function SignUpPage() {
+export default function SignUpPage(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -50,7 +50,7 @@ export default function SignUpPage() {
     },
   });
 
-  async function onSubmit(data: SignUpValues) {
+  async function onSubmit(data: SignUpValues): Promise<void> {
     try {
       setIsLoading(true);
       setError(null);

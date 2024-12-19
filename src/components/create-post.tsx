@@ -12,14 +12,14 @@ import { PenSquare } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function CreatePost() {
+export function CreatePost(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const supabase = createClientComponentClient();
 
-  async function onSubmit() {
+  async function onSubmit(): Promise<void> {
     try {
       setIsLoading(true);
       const {

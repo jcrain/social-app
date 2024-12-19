@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { LikeButton } from "@/components/like-button";
-import { Post, Session as SupabaseSession } from "@/lib/types";
+import { Post } from "@/lib/types";
 import { Session } from "@supabase/auth-helpers-nextjs";
 
 interface Like {
@@ -22,8 +22,8 @@ interface PostCardProps {
   session: Session | null;
 }
 
-function PostCard({ post, session }: PostCardProps) {
-  function formatDate(dateString: string) {
+function PostCard({ post, session }: PostCardProps): JSX.Element {
+  function formatDate(dateString: string): string {
     try {
       return formatDistanceToNow(new Date(dateString), { addSuffix: true });
     } catch {
@@ -47,7 +47,7 @@ function PostCard({ post, session }: PostCardProps) {
             <span className="text-sm text-muted-foreground">
               @{post.profiles?.username}
             </span>
-            <span className="text-sm text-muted-foreground">·</span>
+            <span className="text-sm text-muted-foreground">��</span>
             <span className="text-sm text-muted-foreground">
               {formatDate(post.created_at)}
             </span>
@@ -103,7 +103,7 @@ function PostCard({ post, session }: PostCardProps) {
   );
 }
 
-export default async function Home() {
+export default async function Home(): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
 
   const {
