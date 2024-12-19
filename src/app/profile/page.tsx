@@ -8,8 +8,17 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBanner } from "@/components/profile-banner";
 import { LikeButton } from "@/components/like-button";
+import { Post, Profile, Session } from "@/lib/types";
 
-export default async function ProfilePage() {
+interface Like {
+  user_id: string;
+}
+
+interface PostWithLikes extends Post {
+  isLiked: boolean;
+}
+
+export default async function ProfilePage(): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -54,14 +63,25 @@ export default async function ProfilePage() {
     .eq("user_id", session.user.id)
     .order("created_at", { ascending: false });
 
-  const postsWithLikes = posts?.map((post) => ({
-    ...post,
-    isLiked: post.likes.some((like) => like.user_id === session?.user.id),
-    likes: post.likes.length,
-  }));
+  const postsWithLikes = posts?.map(
+    (post): PostWithLikes => ({
+      ...post,
+      isLiked: post.likes.some(
+        (like: Like) => like.user_id === session?.user.id
+      ),
+    })
+  );
 
   if (!profile) {
     return <div>Profile not found</div>;
+  }
+
+  function formatDate(dateString: string): string {
+    try {
+      return formatDistanceToNow(new Date(dateString), { addSuffix: true });
+    } catch {
+      return "Invalid date";
+    }
   }
 
   return (
@@ -138,7 +158,7 @@ export default async function ProfilePage() {
                     <LikeButton
                       postId={post.id}
                       userId={session?.user.id}
-                      initialLikes={post.likes}
+                      initialLikes={post.likes.length}
                       initialIsLiked={post.isLiked}
                     />
                     <Button variant="ghost" size="sm" className="gap-1">

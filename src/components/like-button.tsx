@@ -19,7 +19,7 @@ export function LikeButton({
   userId,
   initialLikes,
   initialIsLiked,
-}: LikeButtonProps) {
+}: LikeButtonProps): JSX.Element {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likes, setLikes] = useState(initialLikes);
   const [isLoading, setIsLoading] = useState(false);

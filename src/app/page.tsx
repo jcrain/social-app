@@ -6,10 +6,19 @@ import { formatDistanceToNow } from "date-fns";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { LikeButton } from "@/components/like-button";
-import { Post, Session } from "@/lib/types";
+import { Post, Session as SupabaseSession } from "@/lib/types";
+import { Session } from "@supabase/auth-helpers-nextjs";
+
+interface Like {
+  user_id: string;
+}
+
+interface PostWithLikes extends Post {
+  isLiked: boolean;
+}
 
 interface PostCardProps {
-  post: Post;
+  post: PostWithLikes;
   session: Session | null;
 }
 
@@ -121,10 +130,14 @@ export default async function Home() {
     )
     .order("created_at", { ascending: false });
 
-  const postsWithLikes = posts?.map((post) => ({
-    ...post,
-    isLiked: post.likes.some((like) => like.user_id === session?.user.id),
-  }));
+  const postsWithLikes = posts?.map(
+    (post): PostWithLikes => ({
+      ...post,
+      isLiked: post.likes.some(
+        (like: Like) => like.user_id === session?.user.id
+      ),
+    })
+  );
 
   return (
     <main className="max-w-2xl mx-auto p-4">

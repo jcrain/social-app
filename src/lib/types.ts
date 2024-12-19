@@ -1,3 +1,5 @@
+import { User } from "@supabase/auth-helpers-nextjs";
+
 export interface Profile {
   id: string;
   username: string;
@@ -25,8 +27,9 @@ export interface Post {
 }
 
 export interface Session {
-  user: {
-    id: string;
-    email: string;
-  };
+  user: User;
+}
+
+export interface DatabasePost extends Omit<Post, 'isLiked'> {
+  user_id: string;
 } 
