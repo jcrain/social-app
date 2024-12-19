@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
+import { Nav } from "@/components/nav";
+import { Toaster } from "sonner";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  // Optional: configure weights if you don't want to load all of them
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -20,14 +18,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${montserrat.variable} font-sans antialiased`}>
+        <Toaster />
+        {/* @ts-expect-error Async Server Component */}
+        <Nav />
         {children}
       </body>
     </html>
