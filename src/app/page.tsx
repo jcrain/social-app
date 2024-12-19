@@ -47,7 +47,7 @@ function PostCard({ post, session }: PostCardProps): JSX.Element {
             <span className="text-sm text-muted-foreground">
               @{post.profiles?.username}
             </span>
-            <span className="text-sm text-muted-foreground">��</span>
+            <span className="text-sm text-muted-foreground">.</span>
             <span className="text-sm text-muted-foreground">
               {formatDate(post.created_at)}
             </span>
