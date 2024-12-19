@@ -26,7 +26,7 @@ export function LikeButton({
   const router = useRouter();
   const supabase = createClientComponentClient();
 
-  async function toggleLike() {
+  async function toggleLike(): Promise<void> {
     try {
       if (!userId) {
         router.push("/login");

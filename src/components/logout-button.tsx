@@ -9,7 +9,7 @@ export function LogoutButton() {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     await supabase.auth.signOut();
     router.refresh();
   }

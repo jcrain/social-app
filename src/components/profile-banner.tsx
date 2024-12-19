@@ -23,7 +23,9 @@ export function ProfileBanner({ userId, bannerUrl }: ProfileBannerProps) {
     fileInputRef.current?.click();
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> {
     try {
       setIsUploading(true);
       const file = e.target.files?.[0];
