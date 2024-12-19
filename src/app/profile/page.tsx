@@ -8,7 +8,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBanner } from "@/components/profile-banner";
 import { LikeButton } from "@/components/like-button";
-import { Post, Profile, Session } from "@/lib/types";
+import { Post } from "@/lib/types";
 
 interface Like {
   user_id: string;
