@@ -5,15 +5,19 @@ import { MessageCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { Database } from "@/lib/supabase";
 import { LikeButton } from "@/components/like-button";
+import { Post, Session } from "@/lib/types";
 
-function PostCard({ post, session }: { post: any; session: any }) {
-  // Helper function to safely format dates
+interface PostCardProps {
+  post: Post;
+  session: Session | null;
+}
+
+function PostCard({ post, session }: PostCardProps) {
   function formatDate(dateString: string) {
     try {
       return formatDistanceToNow(new Date(dateString), { addSuffix: true });
-    } catch (error) {
+    } catch {
       return "Invalid date";
     }
   }
@@ -47,8 +51,8 @@ function PostCard({ post, session }: { post: any; session: any }) {
           <LikeButton
             postId={post.id}
             userId={session?.user.id}
-            initialLikes={post.likes}
-            initialIsLiked={post.isLiked}
+            initialLikes={post.likes.length}
+            initialIsLiked={post.isLiked || false}
           />
           <Button variant="ghost" size="sm" className="gap-1">
             <MessageCircle className="w-5 h-5" />
@@ -56,10 +60,9 @@ function PostCard({ post, session }: { post: any; session: any }) {
           </Button>
         </div>
 
-        {/* Comments */}
         {post.comments?.length > 0 && (
           <div className="mt-4 space-y-4">
-            {post.comments.map((comment: any) => (
+            {post.comments.map((comment) => (
               <div key={comment.id} className="flex gap-3 pl-2">
                 <Avatar className="w-6 h-6">
                   <AvatarImage src={comment.profiles?.avatar_url} />
@@ -121,7 +124,6 @@ export default async function Home() {
   const postsWithLikes = posts?.map((post) => ({
     ...post,
     isLiked: post.likes.some((like) => like.user_id === session?.user.id),
-    likes: post.likes.length,
   }));
 
   return (
