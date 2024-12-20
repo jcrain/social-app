@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/providers/auth-provider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} font-sans antialiased`}>
         <Toaster />
+        <AuthProvider />
         <Nav />
         {children}
       </body>
