@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { formatDistanceToNow } from "date-fns";
-import { useRouter } from "next/navigation";
 
 interface Notification {
   id: string;
@@ -31,10 +30,9 @@ export function NotificationDropdown(): JSX.Element {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const supabase = createClientComponentClient();
-  const router = useRouter();
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    async function fetchNotifications(): Promise<void> {
       const { data } = await supabase
         .from("notifications")
         .select(
@@ -51,7 +49,7 @@ export function NotificationDropdown(): JSX.Element {
         setNotifications(data);
         setUnreadCount(data.filter((n) => !n.read).length);
       }
-    };
+    }
 
     fetchNotifications();
 
@@ -65,14 +63,14 @@ export function NotificationDropdown(): JSX.Element {
           schema: "public",
           table: "notifications",
         },
-        (payload) => {
+        (payload): void => {
           setNotifications((prev) => [payload.new as Notification, ...prev]);
           setUnreadCount((prev) => prev + 1);
         }
       )
       .subscribe();
 
-    return () => {
+    return (): void => {
       supabase.removeChannel(channel);
     };
   }, [supabase]);
