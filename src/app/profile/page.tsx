@@ -5,34 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
-
-interface PostWithLike {
-  likes: { user_id: string }[];
-  id: string;
-  content: string;
-  created_at: string;
-  user_id: string;
-  profiles: {
-    username: string;
-    full_name: string;
-    avatar_url: string;
-  };
-  comments: {
-    id: string;
-    content: string;
-    created_at: string;
-    profiles: {
-      username: string;
-      full_name: string;
-      avatar_url: string;
-    };
-  }[];
-}
+import { Post } from "@/lib/types";
 
 const addIsLiked = (
-  posts: PostWithLike[],
+  posts: Post[],
   session: { user: { id: string } } | null
-): (PostWithLike & { isLiked: boolean })[] =>
+): (Post & { isLiked: boolean })[] =>
   posts?.map((post) => ({
     ...post,
     isLiked: post.likes.some(
