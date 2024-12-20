@@ -97,7 +97,8 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
                   postId={post.id}
                   userId={session?.user?.id}
                   isLiked={comment.likes?.some(
-                    (like) => like.user_id === session?.user?.id
+                    (like: { user_id: string }) =>
+                      like.user_id === session?.user?.id
                   )}
                 />
               ))}

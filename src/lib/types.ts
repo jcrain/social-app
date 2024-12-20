@@ -13,17 +13,21 @@ export interface Comment {
   id: string;
   content: string;
   created_at: string;
+  parent_id: string | null;
+  user_id: string;
+  post_id: string;
   profiles: Profile;
+  likes: { user_id: string }[];
 }
 
 export interface Post {
   id: string;
   content: string;
   created_at: string;
+  user_id: string;
   profiles: Profile;
   comments: Comment[];
   likes: { user_id: string }[];
-  isLiked?: boolean;
 }
 
 export interface Session {
