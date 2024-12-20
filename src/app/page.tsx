@@ -32,10 +32,19 @@ export default async function Home(): Promise<JSX.Element> {
         id,
         content,
         created_at,
+        parent_id,
         profiles:user_id (
           username,
           full_name,
           avatar_url
+        ),
+        likes:comment_likes(user_id),
+        replies:comments!parent_id(
+          id,
+          content,
+          created_at,
+          profiles:user_id (username, full_name, avatar_url),
+          likes:comment_likes(user_id)
         )
       ),
       likes (

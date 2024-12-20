@@ -8,6 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 import { LikeButton } from "@/components/like-button";
 import { CommentForm } from "@/components/comment-form";
+import { CommentCard } from "@/components/comment-card";
 import { Post } from "@/lib/types";
 import { Session } from "@supabase/auth-helpers-nextjs";
 
@@ -82,31 +83,24 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
 
         {post.comments?.length > 0 && (
           <div className="mt-4 space-y-4">
-            {post.comments.map((comment) => (
-              <div key={comment.id} className="flex gap-3 pl-2">
-                <Avatar className="w-6 h-6">
-                  <AvatarImage src={comment.profiles?.avatar_url} />
-                  <AvatarFallback>
-                    {comment.profiles?.full_name?.[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm">
-                      {comment.profiles?.full_name}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      @{comment.profiles?.username}
-                    </span>
-                    <span className="text-xs text-muted-foreground">·</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatDate(comment.created_at)}
-                    </span>
-                  </div>
-                  <p className="text-sm">{comment.content}</p>
-                </div>
-              </div>
-            ))}
+            {post.comments
+              .filter((comment) => !comment.parent_id)
+              .map((comment) => (
+                <CommentCard
+                  key={comment.id}
+                  comment={{
+                    ...comment,
+                    replies: post.comments.filter(
+                      (reply) => reply.parent_id === comment.id
+                    ),
+                  }}
+                  postId={post.id}
+                  userId={session?.user?.id}
+                  isLiked={comment.likes?.some(
+                    (like) => like.user_id === session?.user?.id
+                  )}
+                />
+              ))}
           </div>
         )}
       </CardContent>

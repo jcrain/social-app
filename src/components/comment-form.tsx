@@ -9,12 +9,14 @@ import { useRouter } from "next/navigation";
 interface CommentFormProps {
   postId: string;
   userId: string;
+  parentId?: string;
   onSuccess?: () => void;
 }
 
 export function CommentForm({
   postId,
   userId,
+  parentId,
   onSuccess,
 }: CommentFormProps): JSX.Element {
   const [content, setContent] = useState("");
@@ -25,9 +27,12 @@ export function CommentForm({
   async function onSubmit(): Promise<void> {
     try {
       setIsLoading(true);
-      const { error } = await supabase
-        .from("comments")
-        .insert({ content, post_id: postId, user_id: userId });
+      const { error } = await supabase.from("comments").insert({
+        content,
+        post_id: postId,
+        user_id: userId,
+        parent_id: parentId,
+      });
 
       if (error) throw error;
 

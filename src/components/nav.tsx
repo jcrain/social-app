@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { LogoutButton } from "@/components/logout-button";
 import { CreatePost } from "@/components/create-post";
+import { NotificationDropdown } from "@/components/notification-dropdown";
 
 export async function Nav(): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
@@ -51,6 +52,7 @@ export async function Nav(): Promise<JSX.Element> {
                   </Avatar>
                 </Link>
                 <LogoutButton />
+                <NotificationDropdown />
               </div>
             ) : (
               <div className="flex gap-4">
