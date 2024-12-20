@@ -3,20 +3,42 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDistanceToNow } from "date-fns";
-import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ProfileBanner } from "@/components/profile-banner";
-import { LikeButton } from "@/components/like-button";
-import { Post } from "@/lib/types";
+import { ProfileTabs } from "@/components/profile-tabs";
 
-interface Like {
+interface PostWithLike {
+  likes: { user_id: string }[];
+  id: string;
+  content: string;
+  created_at: string;
   user_id: string;
+  profiles: {
+    username: string;
+    full_name: string;
+    avatar_url: string;
+  };
+  comments: {
+    id: string;
+    content: string;
+    created_at: string;
+    profiles: {
+      username: string;
+      full_name: string;
+      avatar_url: string;
+    };
+  }[];
 }
 
-interface PostWithLikes extends Post {
-  isLiked: boolean;
-}
+const addIsLiked = (
+  posts: PostWithLike[],
+  session: { user: { id: string } } | null
+): (PostWithLike & { isLiked: boolean })[] =>
+  posts?.map((post) => ({
+    ...post,
+    isLiked: post.likes.some(
+      (like: { user_id: string }) => like.user_id === session?.user.id
+    ),
+  }));
 
 export default async function ProfilePage(): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
@@ -35,42 +57,82 @@ export default async function ProfilePage(): Promise<JSX.Element> {
     .eq("id", session.user.id)
     .single();
 
-  const { data: posts } = await supabase
-    .from("posts")
-    .select(
+  // First, get the post IDs for comments and likes
+  const [postsData, { data: commentedPostIds }, { data: likedPostIds }] =
+    await Promise.all([
+      // Get user's posts
+      supabase
+        .from("posts")
+        .select(
+          `
+        *,
+        profiles:user_id (username, full_name, avatar_url),
+        comments (
+          id, content, created_at,
+          profiles:user_id (username, full_name, avatar_url)
+        ),
+        likes (user_id)
       `
-      *,
-      profiles:user_id (
-        username,
-        full_name,
-        avatar_url
-      ),
-      comments (
-        id,
-        content,
-        created_at,
-        profiles:user_id (
-          username,
-          full_name,
-          avatar_url
         )
-      ),
-      likes (
-        user_id
-      )
-    `
-    )
-    .eq("user_id", session.user.id)
-    .order("created_at", { ascending: false });
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending: false }),
 
-  const postsWithLikes = posts?.map(
-    (post): PostWithLikes => ({
-      ...post,
-      isLiked: post.likes.some(
-        (like: Like) => like.user_id === session?.user.id
-      ),
-    })
-  );
+      // Get post IDs user has commented on
+      supabase
+        .from("comments")
+        .select("post_id")
+        .eq("user_id", session.user.id),
+
+      // Get post IDs user has liked
+      supabase.from("likes").select("post_id").eq("user_id", session.user.id),
+    ]);
+
+  // Then fetch the actual posts for comments and likes
+  const [commentsData, likesData] = await Promise.all([
+    // Get posts user has commented on
+    supabase
+      .from("posts")
+      .select(
+        `
+        *,
+        profiles:user_id (username, full_name, avatar_url),
+        comments (
+          id, content, created_at,
+          profiles:user_id (username, full_name, avatar_url)
+        ),
+        likes (user_id)
+      `
+      )
+      .in(
+        "id",
+        (commentedPostIds || []).map((row) => row.post_id)
+      )
+      .order("created_at", { ascending: false }),
+
+    // Get posts user has liked
+    supabase
+      .from("posts")
+      .select(
+        `
+        *,
+        profiles:user_id (username, full_name, avatar_url),
+        comments (
+          id, content, created_at,
+          profiles:user_id (username, full_name, avatar_url)
+        ),
+        likes (user_id)
+      `
+      )
+      .in(
+        "id",
+        (likedPostIds || []).map((row) => row.post_id)
+      )
+      .order("created_at", { ascending: false }),
+  ]);
+
+  const posts = addIsLiked(postsData.data || [], session);
+  const comments = addIsLiked(commentsData.data || [], session);
+  const likes = addIsLiked(likesData.data || [], session);
 
   if (!profile) {
     return <div>Profile not found</div>;
@@ -78,7 +140,11 @@ export default async function ProfilePage(): Promise<JSX.Element> {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <ProfileBanner userId={session.user.id} bannerUrl={profile.banner_url} />
+      <ProfileBanner
+        userId={session.user.id}
+        bannerUrl={profile.banner_url}
+        avatarUrl={profile.avatar_url}
+      />
 
       <div className="max-w-2xl mx-auto px-4">
         <div className="relative -mt-20">
@@ -110,59 +176,12 @@ export default async function ProfilePage(): Promise<JSX.Element> {
           </Card>
         </div>
 
-        <div className="space-y-4 mt-8">
-          <h2 className="text-2xl font-bold">Posts</h2>
-          {postsWithLikes?.length === 0 ? (
-            <p className="text-muted-foreground">No posts yet</p>
-          ) : (
-            postsWithLikes?.map((post) => (
-              <Card key={post.id}>
-                <CardHeader className="flex flex-row gap-4 space-y-0">
-                  <Avatar>
-                    <AvatarImage
-                      src={post.profiles.avatar_url}
-                      alt={post.profiles.full_name}
-                    />
-                    <AvatarFallback>
-                      {post.profiles.full_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">
-                        {post.profiles.full_name}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        @{post.profiles.username}
-                      </span>
-                      <span className="text-sm text-muted-foreground">·</span>
-                      <span className="text-sm text-muted-foreground">
-                        {formatDistanceToNow(new Date(post.created_at), {
-                          addSuffix: true,
-                        })}
-                      </span>
-                    </div>
-                    <p className="whitespace-pre-wrap">{post.content}</p>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-4 mt-2">
-                    <LikeButton
-                      postId={post.id}
-                      userId={session?.user.id}
-                      initialLikes={post.likes.length}
-                      initialIsLiked={post.isLiked}
-                    />
-                    <Button variant="ghost" size="sm" className="gap-1">
-                      <MessageCircle className="w-5 h-5" />
-                      <span>{post.comments?.length || 0}</span>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
+        <ProfileTabs
+          posts={posts}
+          comments={comments}
+          likes={likes}
+          session={session}
+        />
       </div>
     </div>
   );
