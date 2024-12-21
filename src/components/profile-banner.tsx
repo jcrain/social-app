@@ -10,14 +10,16 @@ import { toast } from "sonner";
 
 interface ProfileBannerProps {
   userId: string;
-  bannerUrl: string | null;
-  avatarUrl: string;
+  bannerUrl?: string;
+  avatarUrl?: string;
+  isOwner: boolean;
 }
 
 export function ProfileBanner({
   userId,
   bannerUrl,
   avatarUrl,
+  isOwner,
 }: ProfileBannerProps): JSX.Element {
   const [isUploading, setIsUploading] = useState(false);
   const bannerInputRef = useRef<HTMLInputElement>(null);
@@ -112,44 +114,52 @@ export function ProfileBanner({
         priority
       />
       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
-        <input
-          ref={bannerInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => handleUpload(e, "banner")}
-          disabled={isUploading}
-        />
-        <Button
-          variant="secondary"
-          size="icon"
-          className="absolute right-4 top-4 h-8 w-8"
-          disabled={isUploading}
-          onClick={() => bannerInputRef.current?.click()}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
+        {isOwner && (
+          <>
+            <input
+              ref={bannerInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleUpload(e, "banner")}
+              disabled={isUploading}
+            />
+            <Button
+              variant="secondary"
+              size="icon"
+              className="absolute right-4 top-4 h-8 w-8"
+              disabled={isUploading}
+              onClick={() => bannerInputRef.current?.click()}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Avatar upload button */}
       <div className="absolute -bottom-16 left-4">
-        <input
-          ref={avatarInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => handleUpload(e, "avatar")}
-          disabled={isUploading}
-        />
-        <Button
-          variant="secondary"
-          size="icon"
-          className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
-          disabled={isUploading}
-          onClick={() => avatarInputRef.current?.click()}
-        >
-          <Camera className="h-4 w-4" />
-        </Button>
+        {isOwner && (
+          <>
+            <input
+              ref={avatarInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleUpload(e, "avatar")}
+              disabled={isUploading}
+            />
+            <Button
+              variant="secondary"
+              size="icon"
+              className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
+              disabled={isUploading}
+              onClick={() => avatarInputRef.current?.click()}
+            >
+              <Camera className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

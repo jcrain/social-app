@@ -45,6 +45,8 @@ export function NotificationDropdown(): JSX.Element {
         .order("created_at", { ascending: false })
         .limit(10);
 
+      console.log("Fetched notifications:", data);
+
       if (data) {
         setNotifications(data);
         setUnreadCount(data.filter((n) => !n.read).length);
@@ -64,6 +66,7 @@ export function NotificationDropdown(): JSX.Element {
           table: "notifications",
         },
         (payload): void => {
+          console.log("Received notification:", payload);
           setNotifications((prev) => [payload.new as Notification, ...prev]);
           setUnreadCount((prev) => prev + 1);
         }
