@@ -70,7 +70,7 @@ export function LikeButton({
   return (
     <Button
       variant="ghost"
-      size="sm"
+      size="default"
       className="gap-1 -ml-3"
       disabled={isLoading}
       onClick={toggleLike}

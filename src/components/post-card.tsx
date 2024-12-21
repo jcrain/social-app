@@ -62,7 +62,7 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
           />
           <Button
             variant="ghost"
-            size="sm"
+            size="default"
             className="gap-1"
             onClick={() => setShowCommentForm(!showCommentForm)}
           >

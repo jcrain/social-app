@@ -15,7 +15,7 @@ export function LogoutButton(): JSX.Element {
   }
 
   return (
-    <Button variant="ghost" size="icon" onClick={handleLogout}>
+    <Button variant="ghost" size="default" onClick={handleLogout}>
       <LogOut className="h-5 w-5" />
     </Button>
   );

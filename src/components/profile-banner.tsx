@@ -121,7 +121,7 @@ export function ProfileBanner({
           disabled={isUploading}
         />
         <Button
-          variant="secondary"
+          variant="default"
           size="icon"
           className="absolute right-4 top-4 h-8 w-8"
           disabled={isUploading}
