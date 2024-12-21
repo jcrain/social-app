@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -11,11 +12,16 @@ interface PostWithLike extends Post {
   likes: { user_id: string }[];
 }
 
+interface PageProps {
+  params: {
+    username: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 export default async function ProfilePage({
   params,
-}: {
-  params: { username: string };
-}): Promise<JSX.Element> {
+}: PageProps): Promise<JSX.Element> {
   const supabase = createServerComponentClient({ cookies });
 
   const {
