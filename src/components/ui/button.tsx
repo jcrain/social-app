@@ -12,9 +12,19 @@ const buttonVariants = cva(
       variant: {
         default: "bg-white hover:bg-gray-100",
         ghost: "hover:bg-gray-100",
-        // ... other variants
+        secondary: "bg-secondary hover:bg-secondary/80",
+        outline: "border border-input hover:bg-accent",
       },
-      // ... rest of the variants
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-10 px-8",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
     },
   }
 );
