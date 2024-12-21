@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Toaster } from "sonner";
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  // Optional: configure weights if you don't want to load all of them
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-montserrat",
-});
 
 export const metadata: Metadata = {
   title: "Cool social media app",
