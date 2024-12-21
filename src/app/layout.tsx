@@ -23,7 +23,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <Toaster />
         <Nav />
         {children}
