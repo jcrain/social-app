@@ -64,13 +64,13 @@ export default async function ProfilePage({
         likes (user_id)
       `
       )
-      .in(
-        "id",
-        `(
-          SELECT post_id FROM comments 
-          WHERE user_id = '${profile.id}'
-        )`
-      )
+      .in("id", [
+        await supabase
+          .from("comments")
+          .select("post_id")
+          .eq("user_id", profile.id)
+          .then(({ data }) => data?.map((row) => row.post_id) || []),
+      ])
       .order("created_at", { ascending: false }),
 
     supabase
@@ -86,13 +86,13 @@ export default async function ProfilePage({
         likes (user_id)
       `
       )
-      .in(
-        "id",
-        `(
-          SELECT post_id FROM likes 
-          WHERE user_id = '${profile.id}'
-        )`
-      )
+      .in("id", [
+        await supabase
+          .from("likes")
+          .select("post_id")
+          .eq("user_id", profile.id)
+          .then(({ data }) => data?.map((row) => row.post_id) || []),
+      ])
       .order("created_at", { ascending: false }),
   ]);
 

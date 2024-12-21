@@ -119,9 +119,10 @@ export default async function ProfilePage(): Promise<JSX.Element> {
   return (
     <div className="max-w-4xl mx-auto">
       <ProfileBanner
-        userId={session.user.id}
+        userId={profile.id}
         bannerUrl={profile.banner_url}
         avatarUrl={profile.avatar_url}
+        isOwner={true}
       />
 
       <div className="max-w-2xl mx-auto px-4">
