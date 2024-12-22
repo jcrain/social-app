@@ -1,18 +1,37 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
-import { PageProps } from "../types";
 
-type ProfilePageProps = PageProps<{ username: string }>;
+interface PageParams {
+  params: { username: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+interface ProfilePageProps {
+  params: { username: string };
+}
+
+export async function generateMetadata({
+  params: { username },
+}: PageParams): Promise<Metadata> {
+  return {
+    title: `@${username}`,
+  };
+}
 
 export default async function ProfilePage({
   params: { username },
 }: ProfilePageProps): Promise<JSX.Element> {
+  if (!username || typeof username !== "string") {
+    notFound();
+  }
+
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
@@ -21,6 +40,10 @@ export default async function ProfilePage({
   } = await supabase.auth.getSession();
 
   // Get profile by username
+  if (!username) {
+    notFound();
+  }
+
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")

@@ -37,4 +37,5 @@ export interface Session {
 
 export interface DatabasePost extends Omit<Post, 'isLiked'> {
   user_id: string;
-} 
+}
+  
