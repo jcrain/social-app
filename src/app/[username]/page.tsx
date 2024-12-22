@@ -6,16 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
+import { PageProps } from "@/app/types";
 
-type Props = {
-  params: {
-    username: string;
-  };
-};
+type ProfilePageProps = PageProps<{ username: string }>;
 
 export default async function ProfilePage({
   params: { username },
-}: Props): Promise<JSX.Element> {
+}: ProfilePageProps): Promise<JSX.Element> {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
