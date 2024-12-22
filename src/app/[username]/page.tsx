@@ -1,3 +1,4 @@
+import type { PageProps } from "@/.next/types/app/[username]/page";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -6,11 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
+import type { Route } from "next";
 
 export default async function ProfilePage({
   params: { username },
 }: {
-  params: { username: string };
+  params: { username: string } & Route;
 }): Promise<JSX.Element> {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
