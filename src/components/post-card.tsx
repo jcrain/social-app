@@ -33,7 +33,7 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
   return (
     <Card className="border-b hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
       <CardHeader className="flex flex-row gap-4 space-y-0">
-        <Link href={`/${post.profiles?.username}`}>
+        <Link href={`/${encodeURIComponent(post.profiles?.username)}`}>
           <Avatar className="hover:opacity-80 transition-opacity">
             <AvatarImage
               src={post.profiles?.avatar_url}
@@ -45,13 +45,13 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <Link
-              href={`/${post.profiles?.username}`}
+              href={`/${encodeURIComponent(post.profiles?.username)}`}
               className="hover:underline"
             >
               <span className="font-semibold">{post.profiles?.full_name}</span>
             </Link>
             <Link
-              href={`/${post.profiles?.username}`}
+              href={`/${encodeURIComponent(post.profiles?.username)}`}
               className="text-sm text-muted-foreground hover:underline"
             >
               @{post.profiles?.username}

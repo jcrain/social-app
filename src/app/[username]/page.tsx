@@ -28,7 +28,7 @@ export default async function ProfilePage({
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
-    .eq("username", username)
+    .eq("username", decodeURIComponent(username))
     .single();
 
   if (!profile) {

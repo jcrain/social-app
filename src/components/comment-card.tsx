@@ -70,7 +70,7 @@ export function CommentCard({
 
   return (
     <div className={`flex gap-3 ${level > 0 ? "ml-8" : ""}`}>
-      <Link href={`/${comment.profiles?.username}`}>
+      <Link href={`/${encodeURIComponent(comment.profiles?.username)}`}>
         <Avatar className="w-6 h-6 hover:opacity-80 transition-opacity">
           <AvatarImage src={comment.profiles?.avatar_url} />
           <AvatarFallback>{comment.profiles?.full_name?.[0]}</AvatarFallback>
@@ -79,7 +79,7 @@ export function CommentCard({
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <Link
-            href={`/${comment.profiles?.username}`}
+            href={`/${encodeURIComponent(comment.profiles?.username)}`}
             className="hover:underline"
           >
             <span className="font-semibold text-sm">
@@ -87,7 +87,7 @@ export function CommentCard({
             </span>
           </Link>
           <Link
-            href={`/${comment.profiles?.username}`}
+            href={`/${encodeURIComponent(comment.profiles?.username)}`}
             className="text-xs text-muted-foreground hover:underline"
           >
             @{comment.profiles?.username}
