@@ -1,4 +1,3 @@
-import type { PageProps } from "@/.next/types/app/[username]/page";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
