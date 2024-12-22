@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
-import { PageProps } from "@/app/types";
+import { PageProps } from "../types";
 
 type ProfilePageProps = PageProps<{ username: string }>;
 
