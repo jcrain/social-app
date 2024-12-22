@@ -12,12 +12,14 @@ interface ProfileBannerProps {
   userId: string;
   bannerUrl: string | null;
   avatarUrl: string;
+  isOwner?: boolean;
 }
 
 export function ProfileBanner({
   userId,
   bannerUrl,
   avatarUrl,
+  isOwner = false,
 }: ProfileBannerProps): JSX.Element {
   const [isUploading, setIsUploading] = useState(false);
   const bannerInputRef = useRef<HTMLInputElement>(null);
@@ -97,6 +99,23 @@ export function ProfileBanner({
     } finally {
       setIsUploading(false);
     }
+  }
+
+  if (!isOwner) {
+    return (
+      <div className="relative h-48 md:h-64 w-full">
+        <Image
+          src={
+            bannerUrl ||
+            "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e"
+          }
+          alt="Profile banner"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+    );
   }
 
   return (
