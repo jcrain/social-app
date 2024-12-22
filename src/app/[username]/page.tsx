@@ -1,18 +1,22 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
 
+type Props = {
+  params: Params & {
+    username: string;
+  };
+};
+
 export default async function ProfilePage({
   params: { username },
-}: {
-  params: { username: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}): Promise<JSX.Element> {
+}: Props): Promise<JSX.Element> {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
