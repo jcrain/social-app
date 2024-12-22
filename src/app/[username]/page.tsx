@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -7,16 +8,11 @@ import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
 
-type PageProps = {
-  params: {
-    username: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
 export default async function ProfilePage({
   params: { username },
-}: PageProps): Promise<JSX.Element> {
+}: {
+  params: { username: string };
+}): Promise<JSX.Element> {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
