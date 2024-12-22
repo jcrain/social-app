@@ -7,12 +7,12 @@ import { ProfileBanner } from "@/components/profile-banner";
 import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
 
-interface PageProps {
+type PageProps = {
   params: {
     username: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
 export default async function ProfilePage({
   params: { username },
