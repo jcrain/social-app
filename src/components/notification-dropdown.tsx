@@ -17,11 +17,11 @@ interface Notification {
   created_at: string;
   type: "like" | "comment" | "reply";
   read: boolean;
-  actor: {
+  profiles: {
     username: string;
     full_name: string;
   };
-  post: {
+  posts: {
     content: string;
   };
 }
@@ -38,8 +38,8 @@ export function NotificationDropdown(): JSX.Element {
         .select(
           `
           *,
-          actor:actor_id(username, full_name),
-          post:post_id(content)
+          profiles!actor_id(username, full_name),
+          posts!post_id(content)
         `
         )
         .order("created_at", { ascending: false })
@@ -126,12 +126,12 @@ export function NotificationDropdown(): JSX.Element {
             >
               <div className="flex items-center gap-1">
                 <span className="font-semibold">
-                  {notification.actor.full_name}
+                  {notification.profiles?.full_name}
                 </span>
                 <span>{getNotificationText(notification)}</span>
               </div>
               <p className="text-sm text-muted-foreground line-clamp-1">
-                {notification.post.content}
+                {notification.posts?.content}
               </p>
               <span className="text-xs text-muted-foreground">
                 {formatDistanceToNow(new Date(notification.created_at), {

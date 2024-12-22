@@ -39,7 +39,7 @@ export async function Nav(): Promise<JSX.Element> {
             {profile ? (
               <div className="flex items-center gap-4">
                 <Link
-                  href="/profile"
+                  href={`/${profile.username}`}
                   className="hover:opacity-75 transition-opacity flex items-center gap-2"
                 >
                   <span className="text-sm">@{profile.username}</span>

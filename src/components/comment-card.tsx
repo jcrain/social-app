@@ -8,6 +8,7 @@ import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { CommentForm } from "./comment-form";
+import Link from "next/link";
 
 interface CommentCardProps {
   comment: {
@@ -69,18 +70,28 @@ export function CommentCard({
 
   return (
     <div className={`flex gap-3 ${level > 0 ? "ml-8" : ""}`}>
-      <Avatar className="w-6 h-6">
-        <AvatarImage src={comment.profiles?.avatar_url} />
-        <AvatarFallback>{comment.profiles?.full_name?.[0]}</AvatarFallback>
-      </Avatar>
+      <Link href={`/${comment.profiles?.username}`}>
+        <Avatar className="w-6 h-6 hover:opacity-80 transition-opacity">
+          <AvatarImage src={comment.profiles?.avatar_url} />
+          <AvatarFallback>{comment.profiles?.full_name?.[0]}</AvatarFallback>
+        </Avatar>
+      </Link>
       <div className="flex-1">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm">
-            {comment.profiles?.full_name}
-          </span>
-          <span className="text-xs text-muted-foreground">
+          <Link
+            href={`/${comment.profiles?.username}`}
+            className="hover:underline"
+          >
+            <span className="font-semibold text-sm">
+              {comment.profiles?.full_name}
+            </span>
+          </Link>
+          <Link
+            href={`/${comment.profiles?.username}`}
+            className="text-xs text-muted-foreground hover:underline"
+          >
             @{comment.profiles?.username}
-          </span>
+          </Link>
           <span className="text-xs text-muted-foreground">·</span>
           <span className="text-xs text-muted-foreground">
             {formatDistanceToNow(new Date(comment.created_at), {

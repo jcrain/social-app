@@ -11,6 +11,8 @@ import { CommentForm } from "@/components/comment-form";
 import { CommentCard } from "@/components/comment-card";
 import { Post } from "@/lib/types";
 import { Session } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
+import Image from "next/image";
 
 interface PostCardProps {
   post: Post & { isLiked: boolean };
@@ -31,25 +33,46 @@ export function PostCard({ post, session }: PostCardProps): JSX.Element {
   return (
     <Card className="border-b hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
       <CardHeader className="flex flex-row gap-4 space-y-0">
-        <Avatar>
-          <AvatarImage
-            src={post.profiles?.avatar_url}
-            alt={post.profiles?.full_name}
-          />
-          <AvatarFallback>{post.profiles?.full_name?.[0]}</AvatarFallback>
-        </Avatar>
+        <Link href={`/${post.profiles?.username}`}>
+          <Avatar className="hover:opacity-80 transition-opacity">
+            <AvatarImage
+              src={post.profiles?.avatar_url}
+              alt={post.profiles?.full_name}
+            />
+            <AvatarFallback>{post.profiles?.full_name?.[0]}</AvatarFallback>
+          </Avatar>
+        </Link>
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">{post.profiles?.full_name}</span>
-            <span className="text-sm text-muted-foreground">
+            <Link
+              href={`/${post.profiles?.username}`}
+              className="hover:underline"
+            >
+              <span className="font-semibold">{post.profiles?.full_name}</span>
+            </Link>
+            <Link
+              href={`/${post.profiles?.username}`}
+              className="text-sm text-muted-foreground hover:underline"
+            >
               @{post.profiles?.username}
-            </span>
+            </Link>
             <span className="text-sm text-muted-foreground">·</span>
             <span className="text-sm text-muted-foreground">
               {formatDate(post.created_at)}
             </span>
           </div>
           <p className="whitespace-pre-wrap">{post.content}</p>
+          {post.image_url && (
+            <div className="mt-2">
+              <Image
+                src={post.image_url}
+                alt="Post image"
+                width={400}
+                height={300}
+                className="rounded-md object-cover"
+              />
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent>
