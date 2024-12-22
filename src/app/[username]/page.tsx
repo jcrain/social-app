@@ -1,7 +1,6 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileBanner } from "@/components/profile-banner";
@@ -9,7 +8,7 @@ import { ProfileTabs } from "@/components/profile-tabs";
 import { Post } from "@/lib/types";
 
 type Props = {
-  params: Params & {
+  params: {
     username: string;
   };
 };
